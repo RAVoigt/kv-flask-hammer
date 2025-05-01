@@ -1,0 +1,62 @@
+[tool.poetry]
+name = "flask-hammer"
+version = "0.1.0"
+description = "Flask-Hammer - For when every problem looks like a nail."
+authors = ["Rob Voigt <code@ravoigt.com>"]
+readme = "README.md"
+license = "MIT"
+homepage = "https://github.com/RAVoigt/kv-flask-hammer"
+repository = "https://github.com/RAVoigt/kv-flask-hammer"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"] # Poetry 1.x style; not PEP 621
+build-backend = "poetry.core.masonry.api"
+
+
+# ================================
+# Tools etc.
+[tool.black]
+line-length = 100
+target-version = ['py311']
+include = '\.pyi?$'
+
+# ================================
+# Dependencies
+[tool.poetry.dependencies]
+python = "^3.11"
+toml = "^0.10.2"
+requests = "*"
+
+# ==== Extras
+
+# Flask & WSGI
+flask = "^3.1.0"
+flask-http-middleware = "^0.4.2"
+flask-apscheduler = "^1.13.1"
+gunicorn = "^21.0.1"
+
+# Metrics
+prometheus-client = "*" # Version set by kvcommon
+prometheus-flask-exporter = "*" # Version set by kvcommon
+
+# Traces
+opentelemetry-exporter-otlp = "*" # Version set by kvcommon
+opentelemetry-instrumentation-flask = "*" # Version set by kvcommon
+opentelemetry-instrumentation-logging = "*" # Version set by kvcommon
+
+# ==== etc
+kvcommon = {extras = ["flask", "metrics", "traces"], version = "^0.3.1"}
+
+
+[tool.poetry.group.dev]
+optional = true
+
+[tool.poetry.group.dev.dependencies]
+black = "*"
+ipdb = "*"
+ipython = "*"
+mock = "*"
+pylint = "*"
+pytest = "*"
+pytest-cov = "*"
+pyfakefs = "*"

@@ -1,0 +1,13 @@
+from flask_hammer import constants
+
+bind_ip = constants.default_bind_ip
+bind_port = constants.default_bind_port
+
+gunicorn_worker_count = constants.default_gunicorn_worker_count
+gunicorn_worker_type = constants.default_gunicorn_worker_type
+gunicorn_worker_timeout = constants.default_gunicorn_worker_timeout
+
+gunicorn_keepalive = constants.default_gunicorn_keepalive
+
+gunicorn_log_level = constants.default_gunicorn_log_level
+gunicorn_accesslog_format = constants.default_gunicorn_accesslog_format
