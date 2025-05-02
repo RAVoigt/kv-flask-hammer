@@ -16,11 +16,10 @@ from kv_flask_hammer import jobs
 from kv_flask_hammer.exceptions import AlreadyStartedError
 from kv_flask_hammer.exceptions import FlaskHammerError
 from kv_flask_hammer.exceptions import ImmutableConfigError
-
 from kv_flask_hammer.gunicorn_app import FlaskHammerGunicornApp
 from kv_flask_hammer.gunicorn_app import gunicorn_funcs
-
 from kv_flask_hammer.logger import get_logger
+from kv_flask_hammer.middleware import FlaskHammerMiddleware
 from kv_flask_hammer.observ.metrics import init_metrics
 from kv_flask_hammer.observ.traces import init_traces
 from kv_flask_hammer.views.healthz import setup_default_healthz
@@ -136,6 +135,7 @@ class FlaskHammer_Interface_Config(metaclass=SingletonMeta):
     def middleware_enable(self):
         self._raise_if_started()
         config.middleware.enabled = True
+        self.middleware_set_cls(FlaskHammerMiddleware)
 
     def middleware_set_cls(self, middleware_cls: t.Type[BaseHTTPMiddleware]):
         self._raise_if_started()

@@ -1,13 +1,6 @@
 from prometheus_client import Histogram
 
-from kv_flask_hammer import config
-
-
-def prefix_label(label: str) -> str:
-    prefix = config.observ.metrics_label_prefix
-    if not prefix:
-        return label
-    return f"{prefix}_{label}"
+from kv_flask_hammer.observ.metrics import prefix_label
 
 
 JOB_SECONDS = Histogram(

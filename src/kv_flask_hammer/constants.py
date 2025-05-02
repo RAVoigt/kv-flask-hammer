@@ -12,3 +12,5 @@ default_metrics_ip = "0.0.0.0"
 default_metrics_port = 9090
 
 default_traces_service_name = "Flask-Hammer"
+
+default_meta_view_prefix = "meta"
