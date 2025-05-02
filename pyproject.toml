@@ -33,7 +33,7 @@ requests = "*"
 flask = "^3.1.0"
 flask-http-middleware = "^0.4.2"
 flask-apscheduler = "^1.13.1"
-gunicorn = "^21.0.1"
+gunicorn = "^23.0.0"
 
 # Metrics
 prometheus-client = "*" # Version set by kvcommon

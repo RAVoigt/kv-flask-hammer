@@ -186,9 +186,7 @@ class FlaskHammer(metaclass=SingletonMeta):
 
     def __init__(self, flask_app: Flask | None = None) -> None:
         self._config = FlaskHammer_Interface_Config()
-
-        if flask_app is not None:
-            self._flask_app = flask_app
+        self._flask_app = flask_app or Flask(__name__)
 
     @property
     def config(self):
@@ -217,12 +215,7 @@ class FlaskHammer(metaclass=SingletonMeta):
                 "Starting FlaskHammer with default config. Config cannot be modified once started."
             )
         self._config.mark_immutable()
-
-        if getattr(self, "_flask_app", None) is None:
-            flask_app = Flask(__name__)
-            self._flask_app = flask_app
-
-        flask_app: Flask | None = self._flask_app
+        flask_app: Flask = self.flask_app
 
         if config.misc.flask_secret_key:
             flask_app.secret_key = config.misc.flask_secret_key
