@@ -3,7 +3,6 @@ from prometheus_flask_exporter.multiprocess import GunicornPrometheusMetrics
 
 
 def child_exit(server, worker):
-    # multiprocess.mark_process_dead(worker.pid)
     GunicornPrometheusMetrics.mark_process_dead_on_child_exit(worker.pid)
 
 
@@ -15,7 +14,7 @@ def get_when_ready_func(
         server.log.info(f"Gunicorn: Server is ready. Spawning {workers_count} workers")
 
         if not metrics_enabled:
-            server.log.info(f"Gunicorn: Skipping Prometheus Metrics server as 'FLASK_HAMMER_METRICS_ENABLED' is False")
+            server.log.info(f"Gunicorn: Skipping Prometheus Metrics server as FlaskHammer metrics are disabled.")
             return
 
         server.log.info(

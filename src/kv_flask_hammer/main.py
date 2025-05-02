@@ -1,8 +1,6 @@
 import logging
 import os
 import typing as t
-import subprocess
-import sys
 
 from flask import Blueprint
 from flask import Flask
@@ -28,13 +26,6 @@ from kv_flask_hammer.observ.traces import init_traces
 from kv_flask_hammer.views.healthz import setup_default_healthz
 from kv_flask_hammer.views.meta import setup_default_meta
 from kv_flask_hammer.utils import SingletonMeta
-
-
-# Set up python path
-# SCRIPT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-# sys.path.insert(0, SCRIPT_DIR)
-# SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-# sys.path.append(os.path.dirname(SCRIPT_DIR))
 
 
 class FlaskHammer_Interface_Config(metaclass=SingletonMeta):
