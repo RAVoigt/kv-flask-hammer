@@ -9,6 +9,7 @@ from flask_http_middleware import MiddlewareManager
 from prometheus_client import Histogram
 
 from kvcommon.flask_utils.scheduler import Scheduler
+from kvcommon.singleton import SingletonMeta
 
 from kv_flask_hammer import config
 from kv_flask_hammer import constants
@@ -24,7 +25,6 @@ from kv_flask_hammer.observ.metrics import init_metrics
 from kv_flask_hammer.observ.traces import init_traces
 from kv_flask_hammer.views.healthz import setup_default_healthz
 from kv_flask_hammer.views.meta import setup_default_meta
-from kv_flask_hammer.utils import SingletonMeta
 
 
 class FlaskHammer_Interface_Config(metaclass=SingletonMeta):
@@ -140,6 +140,10 @@ class FlaskHammer_Interface_Config(metaclass=SingletonMeta):
     def middleware_set_cls(self, middleware_cls: t.Type[BaseHTTPMiddleware]):
         self._raise_if_started()
         config.middleware.middleware_cls = middleware_cls
+
+    def middleware_add_server_request_metric(self, metric: Histogram):
+        self._raise_if_started()
+        config.middleware.server_request_metric = metric
 
     # ======== Metrics
     def metrics_enable(self):
@@ -264,7 +268,7 @@ class FlaskHammer(metaclass=SingletonMeta):
         job_func: t.Callable,
         job_id: str,
         interval_seconds: int,
-        metric: Histogram | None = jobs.metrics.JOB_SECONDS,
+        metric: Histogram | None = None,
         metric_labels: dict[str, str] | None = None,
     ):
         if self._started:

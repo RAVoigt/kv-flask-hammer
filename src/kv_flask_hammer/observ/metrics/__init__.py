@@ -19,22 +19,6 @@ def init_metrics(flask_app: Flask) -> GunicornPrometheusMetrics | None:
     return GunicornPrometheusMetrics(flask_app)
 
 
-def prefix_label(label: str) -> str:
-    prefix = config.observ.metrics_label_prefix
-    if not prefix:
-        return label
-    return f"{prefix}_{label}"
-
-
-SERVER_REQUEST_SECONDS = Histogram(
-    prefix_label("server_request_seconds"),
-    "Time taken for server to handle request",
-    labelnames=["path"],
-)
-
-
 __all__ = [
     "init_metrics",
-    "prefix_label",
-    "SERVER_REQUEST_SECONDS",
 ]

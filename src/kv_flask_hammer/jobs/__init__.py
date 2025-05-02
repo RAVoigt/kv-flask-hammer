@@ -5,34 +5,42 @@ import logging
 
 from prometheus_client import Histogram
 
-from apscheduler.schedulers import SchedulerNotRunningError
 
-from kvcommon.flask_utils.scheduler import scheduler
+from kv_flask_hammer import config
 from kv_flask_hammer.logger import get_logger
-
-from . import metrics
+from kvcommon.flask_utils.metrics.metrics import metric_name_prefix
+from kvcommon.flask_utils.scheduler import scheduler
+from kvcommon.flask_utils.scheduler import filter_apscheduler_logs
 
 
 LOG = get_logger("jobs")
 MINUTE_S = 60
 
 
-# Filter to reduce log spam from APScheduler
-class SuppressThreadPoolExecutorLogging(logging.Filter):
-    def filter(self, record):
-        return "ThreadPoolExecutor" not in record.getMessage()
+JOB_SECONDS = None
+def get_default_job_seconds_metric():
+    global JOB_SECONDS
+    if not JOB_SECONDS:
+        JOB_SECONDS = Histogram(
+            metric_name_prefix("job_seconds"),
+            "Time taken for a job to complete",
+            labelnames=["job_id"],
+        )
+    return JOB_SECONDS
 
 
 def add_job(
     job_func: t.Callable,
     job_id: str,
     interval_seconds: int,
-    metric: Histogram | None = metrics.JOB_SECONDS,
+    metric: Histogram | None = None,
     metric_labels: dict[str, str] | None = None,
 ):
-
-    if metric == metrics.JOB_SECONDS and not metric_labels:
-        metric_labels = dict(job_id=job_id)
+    if config.observ.metrics_enabled:
+        if metric is None:
+            metric = get_default_job_seconds_metric()
+        if metric == JOB_SECONDS and not metric_labels:
+            metric_labels = dict(job_id=job_id)
 
     scheduler.add_job_on_interval(
         job_func,
@@ -44,14 +52,11 @@ def add_job(
 
 
 def init(flask_app):
-    LOG.addFilter(SuppressThreadPoolExecutorLogging())
+    filter_apscheduler_logs(LOG)
 
     # Jobs must be added before starting the scheduler?
     scheduler.start(flask_app=flask_app)
 
 
 def stop():
-    try:
-        scheduler.stop()
-    except SchedulerNotRunningError:
-        pass
+    scheduler.stop()
