@@ -171,10 +171,12 @@ class FlaskHammer(metaclass=SingletonMeta):
     _flask_app: Flask
     _config: FlaskHammer_Interface_Config
     _started: bool = False
+    version: str | None = None
 
-    def __init__(self, flask_app: Flask | None = None) -> None:
+    def __init__(self, flask_app: Flask | None = None, version: str | None = None) -> None:
         self._config = FlaskHammer_Interface_Config()
         self._flask_app = flask_app or Flask(__name__)
+        self.version = version
 
     @property
     def config(self):

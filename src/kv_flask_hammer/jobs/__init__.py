@@ -38,7 +38,7 @@ def add_job(
         job_func,
         job_id=job_id,
         interval_seconds=interval_seconds,
-        metric=metrics.JOB_SECONDS,
+        metric=metric,
         metric_labels=metric_labels,
     )
 
