@@ -286,11 +286,11 @@ class FlaskHammer(metaclass=SingletonMeta):
             accesslog="-",
             access_log_format=config.app.gunicorn_accesslog_format,
             child_exit=gunicorn_funcs.child_exit,
-            gunicorn_when_ready=gunicorn_funcs.get_when_ready_func(
+            when_ready=gunicorn_funcs.get_when_ready_func(
                 workers_count=config.app.gunicorn_worker_count,
                 metrics_enabled=config.observ.metrics_enabled,
                 metrics_bind_ip=config.observ.metrics_ip,
-                metrics_bind_port=str(config.observ.metrics_port),
+                metrics_bind_port=config.observ.metrics_port,
             ),
             pre_fork=gunicorn_funcs.pre_fork,
             post_fork=gunicorn_funcs.post_fork,

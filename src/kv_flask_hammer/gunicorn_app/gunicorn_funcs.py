@@ -10,7 +10,7 @@ def child_exit(server, worker):
 
 
 def get_when_ready_func(
-    workers_count: int, metrics_enabled: bool, metrics_bind_ip: str, metrics_bind_port: str
+    workers_count: int, metrics_enabled: bool, metrics_bind_ip: str, metrics_bind_port: int
 ) -> t.Callable:
 
     def when_ready(server):
