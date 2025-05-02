@@ -12,22 +12,22 @@ from prometheus_client import Histogram
 
 from kvcommon.flask_utils.scheduler import Scheduler
 
-from flask_hammer import config
-from flask_hammer import constants
-from flask_hammer import jobs
-from flask_hammer.exceptions import AlreadyStartedError
-from flask_hammer.exceptions import FlaskHammerError
-from flask_hammer.exceptions import ImmutableConfigError
+from kv_flask_hammer import config
+from kv_flask_hammer import constants
+from kv_flask_hammer import jobs
+from kv_flask_hammer.exceptions import AlreadyStartedError
+from kv_flask_hammer.exceptions import FlaskHammerError
+from kv_flask_hammer.exceptions import ImmutableConfigError
 
-from flask_hammer.gunicorn_app import FlaskHammerGunicornApp
-from flask_hammer.gunicorn_app import gunicorn_funcs
+from kv_flask_hammer.gunicorn_app import FlaskHammerGunicornApp
+from kv_flask_hammer.gunicorn_app import gunicorn_funcs
 
-from flask_hammer.logger import get_logger
-from flask_hammer.observ.metrics import init_metrics
-from flask_hammer.observ.traces import init_traces
-from flask_hammer.views.healthz import setup_default_healthz
-from flask_hammer.views.meta import setup_default_meta
-from flask_hammer.utils import SingletonMeta
+from kv_flask_hammer.logger import get_logger
+from kv_flask_hammer.observ.metrics import init_metrics
+from kv_flask_hammer.observ.traces import init_traces
+from kv_flask_hammer.views.healthz import setup_default_healthz
+from kv_flask_hammer.views.meta import setup_default_meta
+from kv_flask_hammer.utils import SingletonMeta
 
 
 # Set up python path

@@ -1,4 +1,4 @@
-from flask_hammer import constants
+from kv_flask_hammer import constants
 
 bind_ip = constants.default_bind_ip
 bind_port = constants.default_bind_port

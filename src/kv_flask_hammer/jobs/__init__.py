@@ -6,7 +6,7 @@ import logging
 from prometheus_client import Histogram
 
 from kvcommon.flask_utils.scheduler import scheduler
-from flask_hammer.logger import get_logger
+from kv_flask_hammer.logger import get_logger
 
 from . import metrics
 
@@ -46,6 +46,7 @@ def init(flask_app):
 
     # Jobs must be added before starting the scheduler?
     scheduler.start(flask_app=flask_app)
+
 
 def stop():
     scheduler.stop()

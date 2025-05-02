@@ -1,8 +1,8 @@
 from flask import Flask
 from prometheus_flask_exporter.multiprocess import GunicornPrometheusMetrics
 
-from flask_hammer import config
-from flask_hammer.logger import get_logger
+from kv_flask_hammer import config
+from kv_flask_hammer.logger import get_logger
 
 LOG = get_logger("metrics")
 

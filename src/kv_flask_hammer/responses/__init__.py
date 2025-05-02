@@ -1,6 +1,6 @@
 import typing as t
 
-from flask_hammer.logger import get_logger
+from kv_flask_hammer.logger import get_logger
 from kvcommon.flask_utils.responses import HTTPResponse
 
 

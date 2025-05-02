@@ -1,4 +1,4 @@
-from flask_hammer import constants
+from kv_flask_hammer import constants
 
 metrics_enabled = False
 traces_enabled = False

@@ -1,15 +1,15 @@
 import typing as t
 from flask import Blueprint
 
-from flask_hammer.responses import HealthzLiveResponse
-from flask_hammer.responses import HealthzReadyResponse
-from flask_hammer.responses import UnknownResponse
+from kv_flask_hammer.responses import HealthzLiveResponse
+from kv_flask_hammer.responses import HealthzReadyResponse
+from kv_flask_hammer.responses import UnknownResponse
 
 
 def setup_default_healthz(
-        prefix: str,
-        liveness_callback: t.Callable[[], bool] | None = None,
-        readiness_callback: t.Callable[[], bool] | None = None
+    prefix: str,
+    liveness_callback: t.Callable[[], bool] | None = None,
+    readiness_callback: t.Callable[[], bool] | None = None,
 ) -> Blueprint:
     url_prefix = None
     if prefix:

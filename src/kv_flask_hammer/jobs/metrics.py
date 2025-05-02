@@ -1,6 +1,6 @@
 from prometheus_client import Histogram
 
-from flask_hammer import config
+from kv_flask_hammer import config
 
 
 def prefix_label(label: str) -> str:

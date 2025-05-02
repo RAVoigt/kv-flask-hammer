@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "flask-hammer"
+name = "kv-flask-hammer"
 version = "0.1.0"
 description = "Flask-Hammer - For when every problem looks like a nail."
 authors = ["Rob Voigt <code@ravoigt.com>"]

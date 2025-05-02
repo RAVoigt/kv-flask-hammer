@@ -12,6 +12,8 @@ This lib is my kludgy way to reduce the boilerplate of those added extras that I
 Flask-Hammer's value (to me) is in helping to stand up a batteries-included flask app very quickly from an idea or for an MVP.
 Its value to anyone else is probably minimal.
 
+Contributions and fixes are welcome, but for the time being this is deliberately more of an idiosyncratic convenience library than anything else.
+
 
 # PyPi
 https://pypi.org/project/kv-flask-hammer/
@@ -27,17 +29,25 @@ https://pypi.org/project/kv-flask-hammer/
 # Example Usage
 
 ```python
-from flask_hammer import FlaskHammer
+from kv_flask_hammer import FlaskHammer
 
 def example_periodic_job():
     print("Job Tick!")
 
 app = FlaskHammer()
 
+# Almost all of these config changes are optional
+# Defaults can be found in constants.py
+
+# For SSL
+app.config.flask_set_secret_key("test")
+
 # Set bind IP address and port for gunicorn/flask
 app.config.set_ip_port("0.0.0.0", "5000")
 
-app.config.flask_set_secret_key("test")
+# Enable Middleware and add a class
+app.config.middleware_enable()
+app.config.middleware_set_cls(ExampleMiddlewareClass)
 
 # Enable basic healthz/livez routes
 app.config.healthz_view_enable()
@@ -68,3 +78,12 @@ def main():
 ```bash
 .venv/bin/python -c "from flask_hammer_example import main; main()"
 ```
+
+## Why 'kv_'?
+
+* I prefix most of my projects, libs, etc. with 'kv' or 'zkv' for reasons that aren't interesting to anyone else.
+* This library isn't purporting or pretending to be in any way official or associated with Flask; nor is it a plugin for it. It'd feel weird to just call it `flask-hammer` officially (and on pypi, etc.) in light of that.
+
+## Notice
+
+This library is not associated with Flask, Gunicorn or their maintainers or contributors. It's just a convenience library made independently for my own use.
