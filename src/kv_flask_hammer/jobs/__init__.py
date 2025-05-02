@@ -5,6 +5,8 @@ import logging
 
 from prometheus_client import Histogram
 
+from apscheduler.schedulers import SchedulerNotRunningError
+
 from kvcommon.flask_utils.scheduler import scheduler
 from kv_flask_hammer.logger import get_logger
 
@@ -49,4 +51,7 @@ def init(flask_app):
 
 
 def stop():
-    scheduler.stop()
+    try:
+        scheduler.stop()
+    except SchedulerNotRunningError:
+        pass

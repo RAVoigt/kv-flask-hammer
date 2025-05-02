@@ -145,7 +145,6 @@ class FlaskHammer_Interface_Config(metaclass=SingletonMeta):
     def metrics_enable(self):
         self._raise_if_started()
         config.observ.metrics_enabled = True
-        os.environ["FLASK_HAMMER_METRICS_ENABLED"] = "true"  # For gunicorn conf
 
     def metrics_set_prefix(self, prefix: str):
         self._raise_if_started()
@@ -156,9 +155,7 @@ class FlaskHammer_Interface_Config(metaclass=SingletonMeta):
     ):
         self._raise_if_started()
         config.observ.metrics_ip = ip
-        os.environ["FLASK_HAMMER_METRICS_BIND_IP_ADDRESS"] = ip  # For gunicorn conf
         config.observ.metrics_port = port
-        os.environ["FLASK_HAMMER_METRICS_PORT"] = str(port)  # For gunicorn conf
 
     # ======== Traces
     def traces_enable(self):
@@ -237,13 +234,16 @@ class FlaskHammer(metaclass=SingletonMeta):
             self._flask_app.register_blueprint(bp_meta)
 
         # ======== Observ - Metrics
-        init_metrics(flask_app)
+        if config.observ.metrics_enabled:
+            init_metrics(flask_app)
 
         # ======== Observ - Traces
-        init_traces(flask_app)
+        if config.observ.traces_enabled:
+            init_traces(flask_app)
 
         # ======== Periodic Jobs
-        jobs.init(flask_app)
+        if config.jobs.enabled:
+            jobs.init(flask_app)
 
         # ======== Finish up
         self._started = True
@@ -297,6 +297,9 @@ class FlaskHammer(metaclass=SingletonMeta):
             pre_exec=gunicorn_funcs.pre_exec,
             worker_int=gunicorn_funcs.get_worker_int_func(callbacks=[jobs.stop]),
             worker_abort=gunicorn_funcs.get_worker_abort_func(callbacks=[jobs.stop]),
+            logger_class=gunicorn_funcs.configure_gunicorn_log(
+                config.logs.logging_format_string, config.logs.logging_format_time
+            ),
         )
 
         FlaskHammerGunicornApp.run_with_config(self.flask_app, options)

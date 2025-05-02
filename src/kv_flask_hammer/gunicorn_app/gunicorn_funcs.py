@@ -1,4 +1,7 @@
+import logging
 import typing as t
+
+from gunicorn import glogging
 from prometheus_flask_exporter.multiprocess import GunicornPrometheusMetrics
 
 
@@ -67,3 +70,15 @@ def get_worker_abort_func(callbacks: list[t.Callable]):
             cb()
 
     return worker_abort
+
+
+def configure_gunicorn_log(logging_format_string: str, logging_format_time: str) -> type[glogging.Logger]:
+
+    class CustomLogger(glogging.Logger):
+        def setup(self, cfg):
+            super().setup(cfg)
+            formatter = logging.Formatter(fmt=logging_format_string, datefmt=logging_format_time)
+            self._set_handler(self.error_log, cfg.errorlog, formatter)
+            self._set_handler(self.access_log, cfg.accesslog, formatter)
+
+    return CustomLogger
