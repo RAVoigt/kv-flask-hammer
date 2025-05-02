@@ -64,7 +64,7 @@ def main():
     return app.run_with_gunicorn()
 ```
 
-# Starting the above example app from e.g.; a bash script as a Docker Container entrypoint:
+### Starting the above example app from e.g.; a bash script as a Docker Container entrypoint:
 ```bash
 .venv/bin/python -c "from flask_hammer_example import main; main()"
 ```
