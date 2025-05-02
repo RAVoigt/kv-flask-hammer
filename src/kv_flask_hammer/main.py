@@ -95,6 +95,10 @@ class FlaskHammer_Interface_Config(metaclass=SingletonMeta):
         self._raise_if_started()
         config.jobs.enabled = True
 
+    def set_default_job_time_metric(self, metric: Histogram):
+        self._raise_if_started()
+        config.jobs.default_job_time_metric = metric
+
     # ======== Logging
     def logging_set_prefix(self, prefix: str):
         self._raise_if_started()

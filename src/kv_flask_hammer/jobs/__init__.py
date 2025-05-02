@@ -21,8 +21,10 @@ JOB_SECONDS = None
 def get_default_job_seconds_metric():
     global JOB_SECONDS
     if not JOB_SECONDS:
+        JOB_SECONDS = config.jobs.default_job_time_metric
+    if not JOB_SECONDS:
         JOB_SECONDS = Histogram(
-            metric_name_prefix("job_seconds"),
+            metric_name_prefix("job_seconds", config.observ.metrics_label_prefix),
             "Time taken for a job to complete",
             labelnames=["job_id"],
         )
