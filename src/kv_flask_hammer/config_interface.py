@@ -80,6 +80,10 @@ class FlaskHammer_Interface_Config(metaclass=SingletonMeta):
         self._raise_if_started()
         config.jobs.enabled = True
 
+    def jobs_disable(self):
+        self._raise_if_started()
+        config.jobs.enabled = False
+
     def set_default_job_time_metric(self, metric: Histogram):
         self._raise_if_started()
         config.jobs.default_job_time_metric = metric
@@ -139,6 +143,10 @@ class FlaskHammer_Interface_Config(metaclass=SingletonMeta):
         self._raise_if_started()
         config.observ.metrics_enabled = True
 
+    def metrics_disable(self):
+        self._raise_if_started()
+        config.observ.metrics_enabled = False
+
     def metrics_set_prefix(self, prefix: str):
         self._raise_if_started()
         config.observ.metrics_label_prefix = prefix
@@ -154,6 +162,10 @@ class FlaskHammer_Interface_Config(metaclass=SingletonMeta):
     def traces_enable(self):
         self._raise_if_started()
         config.observ.traces_enabled = True
+
+    def traces_disable(self):
+        self._raise_if_started()
+        config.observ.traces_enabled = False
 
     def traces_set_endpoint_url(self, url: str):
         self._raise_if_started()
