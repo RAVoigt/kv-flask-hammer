@@ -122,10 +122,11 @@ class FlaskHammer(metaclass=SingletonMeta):
         interval_seconds: int,
         metric: Histogram | None = None,
         metric_labels: dict[str, str] | None = None,
+        run_immediately_via_thread: bool = False
     ):
         if self._started:
             raise AlreadyStartedError("Cannot add jobs after FlaskHammer has started")
-        jobs.add_job(job_func, job_id, interval_seconds, metric, metric_labels)
+        jobs.add_job(job_func, job_id, interval_seconds, metric, metric_labels, run_immediately_via_thread)
 
     def run_with_gunicorn(self):
 
