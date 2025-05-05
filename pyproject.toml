@@ -45,7 +45,7 @@ opentelemetry-instrumentation-flask = "*" # Version set by kvcommon
 opentelemetry-instrumentation-logging = "*" # Version set by kvcommon
 
 # ==== etc
-kvcommon = {extras = ["flask", "metrics", "traces"], version = "^0.3.2"}
+kvcommon = {extras = ["flask", "metrics", "traces"], version = "^0.3.4"}
 
 [tool.poetry.group.dev]
 optional = true
