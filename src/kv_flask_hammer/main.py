@@ -139,10 +139,8 @@ class FlaskHammer(metaclass=SingletonMeta):
             **job_kwargs,
         )
 
-    def run_with_gunicorn(self):
 
-        if not self.started:
-            self.start()
+    def run_with_gunicorn(self):
 
         options = dict(
             preload_app=True,
@@ -163,7 +161,7 @@ class FlaskHammer(metaclass=SingletonMeta):
                 metrics_bind_port=config.observ.metrics_port,
             ),
             pre_fork=gunicorn_funcs.pre_fork,
-            post_fork=gunicorn_funcs.post_fork,
+            post_fork=gunicorn_funcs.get_post_fork_func(self),
             pre_exec=gunicorn_funcs.pre_exec,
             worker_int=gunicorn_funcs.get_worker_int_func(callbacks=[jobs.stop]),
             worker_abort=gunicorn_funcs.get_worker_abort_func(callbacks=[jobs.stop]),

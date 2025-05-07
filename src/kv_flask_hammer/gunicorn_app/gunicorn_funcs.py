@@ -4,6 +4,8 @@ import typing as t
 from gunicorn import glogging
 from prometheus_flask_exporter.multiprocess import GunicornPrometheusMetrics
 
+from kv_flask_hammer import FlaskHammer
+
 
 def child_exit(server, worker):
     GunicornPrometheusMetrics.mark_process_dead_on_child_exit(worker.pid)
@@ -28,8 +30,14 @@ def get_when_ready_func(
     return when_ready
 
 
-def post_fork(server, worker):
-    server.log.info("Gunicorn: Worker spawned (pid: %s)", worker.pid)
+def get_post_fork_func(flask_hammer_app: FlaskHammer):
+
+    def post_fork(server, worker):
+        server.log.info("Gunicorn: Worker spawned (pid: %s)", worker.pid)
+        if not flask_hammer_app.started:
+            flask_hammer_app.start()
+
+    return post_fork
 
 
 def pre_fork(server, worker):
