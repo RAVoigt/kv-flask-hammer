@@ -37,7 +37,9 @@ def add_job(
     interval_seconds: int,
     metric: Histogram | None = None,
     metric_labels: dict[str, str] | None = None,
-    run_immediately_via_thread: bool = False
+    run_immediately_via_thread: bool = False,
+    *job_args,
+    **job_kwargs
 ):
     if config.observ.metrics_enabled:
         if metric is None:
@@ -51,7 +53,9 @@ def add_job(
         interval_seconds=interval_seconds,
         metric=metric,
         metric_labels=metric_labels,
-        run_immediately_via_thread=run_immediately_via_thread
+        run_immediately_via_thread=run_immediately_via_thread,
+        *job_args,
+        **job_kwargs
     )
 
 
