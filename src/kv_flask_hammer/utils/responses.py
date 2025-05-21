@@ -5,7 +5,7 @@ from kv_flask_hammer.utils import metrics
 
 
 class HTTPResponse(Flask_Response):
-    _METRIC: Counter
+    _METRIC: Counter | None = None # Override this with a valid Counter to have it inc'd on each instance of this response
     _metrics_labels: dict
     _metrics_emitted_doonce: bool = False
 
@@ -15,7 +15,6 @@ class HTTPResponse(Flask_Response):
         do_metrics=True,
         defer_metrics=False,
         metrics_labels: dict | None = None,
-        metrics_prefix: str | None = None,
         **kwargs,
     ) -> None:
         """
@@ -30,8 +29,6 @@ class HTTPResponse(Flask_Response):
             metrics_labels: Optional dict of key-value pairs of labels to add to the emitted metrics
         """
         super().__init__(*args, **kwargs)
-
-        self._METRIC = metrics.DefaultMetrics.HTTP_RESPONSE_COUNT(metrics_prefix)
 
         self._do_metrics = do_metrics
         self._defer_metrics = defer_metrics
@@ -48,7 +45,7 @@ class HTTPResponse(Flask_Response):
                 "An attempt to emit metrics from this HTTP Response has already been made."
             )
         self._metrics_emitted_doonce = True
-        if self._do_metrics:
+        if self._do_metrics and self._METRIC:
             metric_labels_to_incr = self._METRIC.labels(**self._metrics_labels)
             if metric_labels_to_incr:
                 metric_labels_to_incr.inc()
