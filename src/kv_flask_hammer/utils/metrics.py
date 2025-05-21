@@ -67,12 +67,20 @@ class DefaultMetrics(metaclass=SingletonMeta):
     """
     Wrap these default metrics in this singleton so they can be instantiated on-demand.
     Avoid registering unwanted metrics accidentally just by importing. Return pre-existing metrics by name.
+
+    # TODO: This is over-engineered - Get rid of it and find a cleaner workaround for instantiating metrics
     """
 
     _APP_INFO_metrics: dict[str, Gauge]
     _HTTP_RESPONSE_COUNT_metrics: dict[str, Counter]
     _SCHEDULER_JOB_EVENT_metrics: dict[str, Counter]
     _SERVER_REQUEST_SECONDS_metrics: dict[str, Histogram]
+
+    def __init__(self) -> None:
+        self._APP_INFO_metrics = dict()
+        self._HTTP_RESPONSE_COUNT_metrics = dict()
+        self._SCHEDULER_JOB_EVENT_metrics = dict()
+        self._SERVER_REQUEST_SECONDS_metrics = dict()
 
     def get_APP_INFO(
         self,
