@@ -8,7 +8,7 @@ from prometheus_client import Histogram
 
 from kv_flask_hammer import config
 from kv_flask_hammer.logger import get_logger
-from kvcommon.flask_utils.metrics.metrics import metric_name_prefix
+from kvcommon.flask_utils.metrics import add_prefix
 from kvcommon.flask_utils.scheduler import scheduler
 from kvcommon.flask_utils.scheduler import filter_apscheduler_logs
 
@@ -24,7 +24,7 @@ def get_default_job_seconds_metric():
         JOB_SECONDS = config.jobs.default_job_time_metric
     if not JOB_SECONDS:
         JOB_SECONDS = Histogram(
-            metric_name_prefix("job_seconds", config.observ.metrics_label_prefix),
+            add_prefix("job_seconds", config.observ.metrics_label_prefix),
             "Time taken for a job to complete",
             labelnames=["job_id"],
         )
