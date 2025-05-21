@@ -1,7 +1,7 @@
 import typing as t
 from flask import Blueprint
 
-from kvcommon.flask_utils.views import get_url_map
+from kv_flask_hammer.utils.views import get_url_map
 
 
 def setup_default_meta(

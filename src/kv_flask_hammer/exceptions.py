@@ -6,5 +6,6 @@ class FlaskHammerError(Exception):
 class AlreadyStartedError(FlaskHammerError):
     pass
 
+
 class ImmutableConfigError(AlreadyStartedError):
     pass

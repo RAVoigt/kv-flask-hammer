@@ -1,20 +1,15 @@
 import dataclasses
-import logging
 import typing as t
 from urllib.parse import ParseResult
 
-from flask import Request
-from flask import Response
 from flask_http_middleware import BaseHTTPMiddleware
-
 from prometheus_client import Histogram
 
 from kvcommon.urls import urlparse_ignore_scheme
-from kvcommon.flask_utils.context import set_flask_context_local
 
 from kv_flask_hammer import config
 from kv_flask_hammer.constants import default_meta_view_prefix
-from kv_flask_hammer.observ import metrics
+from kv_flask_hammer.utils.context import set_flask_context_local
 
 
 def is_meta_url(url: str, prefix: str | None = "meta") -> bool:

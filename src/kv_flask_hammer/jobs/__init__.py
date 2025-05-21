@@ -8,9 +8,9 @@ from prometheus_client import Histogram
 
 from kv_flask_hammer import config
 from kv_flask_hammer.logger import get_logger
-from kvcommon.flask_utils.metrics import add_prefix
-from kvcommon.flask_utils.scheduler import scheduler
-from kvcommon.flask_utils.scheduler import filter_apscheduler_logs
+from kv_flask_hammer.utils.metrics import add_prefix
+from kv_flask_hammer.utils.scheduler import scheduler
+from kv_flask_hammer.utils.scheduler import filter_apscheduler_logs
 
 
 LOG = get_logger("jobs")

@@ -6,7 +6,6 @@ from flask import Flask
 from flask_http_middleware import MiddlewareManager
 from prometheus_client import Histogram
 
-from kvcommon.flask_utils.scheduler import Scheduler
 from kvcommon.singleton import SingletonMeta
 
 from kv_flask_hammer import config
@@ -21,6 +20,7 @@ from kv_flask_hammer.observ.metrics import init_metrics
 from kv_flask_hammer.observ.traces import init_traces
 from kv_flask_hammer.views.healthz import setup_default_healthz
 from kv_flask_hammer.views.meta import setup_default_meta
+from kv_flask_hammer.utils.scheduler import Scheduler
 
 
 class FlaskHammer(metaclass=SingletonMeta):

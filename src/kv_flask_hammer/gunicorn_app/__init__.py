@@ -3,7 +3,6 @@ import typing as t
 from flask import Flask
 
 from gunicorn.app.base import BaseApplication
-
 from gunicorn.config import Config
 
 

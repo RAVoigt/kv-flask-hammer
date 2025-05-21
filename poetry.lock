@@ -735,33 +735,21 @@ i18n = ["Babel (>=2.7)"]
 
 [[package]]
 name = "kvcommon"
-version = "0.3.8"
+version = "0.4.0"
 description = "Library of miscellaneous common python utils that aren't worthy of their own dedicated libs."
 optional = false
 python-versions = "<4.0,>=3.11"
 groups = ["main"]
 files = [
-    {file = "kvcommon-0.3.8-py3-none-any.whl", hash = "sha256:33bd8522f9a9564f78bc1fd99535e50829e51cb62f9261b00e151f9333981aff"},
-    {file = "kvcommon-0.3.8.tar.gz", hash = "sha256:4ad11b5b512ed26557cf030e263cbc314f8674d85158d1ce8b595722796ccd04"},
+    {file = "kvcommon-0.4.0-py3-none-any.whl", hash = "sha256:053e828ba12c31c94d0b3fea78bd789640773defa279468185ae252995efdf9a"},
+    {file = "kvcommon-0.4.0.tar.gz", hash = "sha256:08c919ad131588b93ee2d5c93ac90ab26064a976d3c24e6d8d71c28fc812aa71"},
 ]
 
 [package.dependencies]
-flask = {version = ">=3.1.0,<4.0.0", optional = true, markers = "extra == \"flask\""}
-flask-apscheduler = {version = ">=1.13.1,<2.0.0", optional = true, markers = "extra == \"flask\""}
-flask-http-middleware = {version = ">=0.4.2,<0.5.0", optional = true, markers = "extra == \"flask\""}
-jinja2 = {version = ">=3.1.6,<4.0.0", optional = true, markers = "extra == \"flask\""}
-opentelemetry-exporter-otlp = {version = "*", optional = true, markers = "extra == \"traces\""}
-opentelemetry-instrumentation-flask = {version = "*", optional = true, markers = "extra == \"traces\""}
-opentelemetry-instrumentation-logging = {version = "*", optional = true, markers = "extra == \"traces\""}
-prometheus-client = {version = ">=0.20.0,<0.21.0", optional = true, markers = "extra == \"metrics\""}
-prometheus-flask-exporter = {version = ">=0.23.1,<0.24.0", optional = true, markers = "extra == \"metrics\""}
 toml = ">=0.10.2,<0.11.0"
 
 [package.extras]
-flask = ["flask (>=3.1.0,<4.0.0)", "flask-apscheduler (>=1.13.1,<2.0.0)", "flask-http-middleware (>=0.4.2,<0.5.0)", "jinja2 (>=3.1.6,<4.0.0)"]
 k8s = ["kubernetes (>=31.0.0,<32.0.0)"]
-metrics = ["prometheus-client (>=0.20.0,<0.21.0)", "prometheus-flask-exporter (>=0.23.1,<0.24.0)"]
-traces = ["opentelemetry-exporter-otlp", "opentelemetry-instrumentation-flask", "opentelemetry-instrumentation-logging"]
 
 [[package]]
 name = "markupsafe"
@@ -1709,4 +1697,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.11"
-content-hash = "03548d537ac41e1c11119f5bed013f844cca3ef9b687cd1f8e0b9a186ebb902d"
+content-hash = "0f3905988c5060a2cfd81f0cf9890188e19cca36c8bc752b88bda29f72df5914"

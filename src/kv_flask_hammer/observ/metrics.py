@@ -1,5 +1,4 @@
 from flask import Flask
-from prometheus_client import Histogram
 from prometheus_flask_exporter.multiprocess import GunicornPrometheusMetrics
 
 from kv_flask_hammer import config
