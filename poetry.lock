@@ -735,14 +735,14 @@ i18n = ["Babel (>=2.7)"]
 
 [[package]]
 name = "kvcommon"
-version = "0.3.7"
+version = "0.3.8"
 description = "Library of miscellaneous common python utils that aren't worthy of their own dedicated libs."
 optional = false
 python-versions = "<4.0,>=3.11"
 groups = ["main"]
 files = [
-    {file = "kvcommon-0.3.7-py3-none-any.whl", hash = "sha256:2cf7302d4fabfe123ef5486b69c27dc3d904aaf5a107ce19ce08526e082ccb5f"},
-    {file = "kvcommon-0.3.7.tar.gz", hash = "sha256:9a878130473523a08259db16ad847b78fe3b9ee9d0dce6141f235a58533207a3"},
+    {file = "kvcommon-0.3.8-py3-none-any.whl", hash = "sha256:33bd8522f9a9564f78bc1fd99535e50829e51cb62f9261b00e151f9333981aff"},
+    {file = "kvcommon-0.3.8.tar.gz", hash = "sha256:4ad11b5b512ed26557cf030e263cbc314f8674d85158d1ce8b595722796ccd04"},
 ]
 
 [package.dependencies]
@@ -1709,4 +1709,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.11"
-content-hash = "5faa931e79049e171a2cd67611235758c12e03e0585de6a79973879c94e348bb"
+content-hash = "03548d537ac41e1c11119f5bed013f844cca3ef9b687cd1f8e0b9a186ebb902d"
