@@ -14,6 +14,7 @@ from flask_apscheduler import APScheduler
 from prometheus_client import Counter
 from prometheus_client import Histogram
 
+from kv_flask_hammer import config
 from kv_flask_hammer.utils import metrics
 
 from kvcommon.logger import get_logger
@@ -89,6 +90,12 @@ class Scheduler:
         scheduler.api_enabled = api_enabled
         self.ap_scheduler = scheduler
 
+        if job_time_metric is None:
+            job_time_metric = metrics.DefaultMetrics().JOB_SECONDS(name_prefix=config.observ.metrics_label_prefix)
+
+        if job_event_metric is None:
+            job_event_metric = metrics.DefaultMetrics().SCHEDULER_JOB_EVENT(name_prefix=config.observ.metrics_label_prefix)
+
         self.job_time_metric = job_time_metric
 
         self.event_tracker = None
@@ -150,5 +157,7 @@ class Scheduler:
         except SchedulerNotRunningError:
             pass
 
+
+# TODO: Make this configurable and move instantiation of Scheduler
 
 scheduler = Scheduler()
