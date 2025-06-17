@@ -137,7 +137,6 @@ class FlaskHammer(metaclass=SingletonMeta):
         if self._started:
             raise AlreadyStartedError("Cannot add jobs after FlaskHammer has started")
         jobs.add_job(
-            self.job_scheduler,
             job_func,
             job_id,
             interval_seconds,
