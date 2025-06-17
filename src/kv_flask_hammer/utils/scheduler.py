@@ -49,13 +49,6 @@ class SchedulerEventTracker(object):
                 event_str = "Unknown"
                 if event.exception or event.code == EVENT_JOB_ERROR:
                     event_str = "Error"
-                    exc_cls_name = ""
-                    if event.exception:
-                        exc_cls_name = event.exception.__class__.__name__
-                    metrics.inc(
-                        metrics.DefaultMetrics().UNHANDLED_EXCEPTIONS(),
-                        labels=dict(exc_cls_name=exc_cls_name, source=metrics.UnhandledExceptionSources.JOB),
-                    )
                 else:
                     if event.code == EVENT_JOB_EXECUTED:
                         event_str = "Executed"
@@ -130,8 +123,18 @@ class Scheduler:
                 return
 
             # Wrap the call with a Histogram metric time() if supplied
-            with metric.labels(**metric_labels).time():
-                job_func(*job_args, **job_kwargs)
+            try:
+                with metric.labels(**metric_labels).time():
+                    job_func(*job_args, **job_kwargs)
+            except Exception as ex:
+                metrics.inc(
+                    metrics.DefaultMetrics().UNHANDLED_EXCEPTIONS(),
+                    labels=dict(
+                        exc_cls_name=ex.__class__.__name__,
+                        source=metrics.UnhandledExceptionSources.JOB
+                    ),
+                )
+                raise
 
         if run_immediately_via_thread:
             thread = threading.Thread(target=job)
@@ -156,8 +159,3 @@ class Scheduler:
             self.ap_scheduler.shutdown()
         except SchedulerNotRunningError:
             pass
-
-
-# TODO: Make this configurable and move instantiation of Scheduler
-
-scheduler = Scheduler()

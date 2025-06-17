@@ -1,6 +1,7 @@
 import typing as t
 
 from flask_http_middleware import BaseHTTPMiddleware
+from prometheus_client import Counter
 from prometheus_client import Histogram
 
 from kvcommon.singleton import SingletonMeta
@@ -84,9 +85,13 @@ class FlaskHammer_Interface_Config(metaclass=SingletonMeta):
         self._raise_if_started()
         config.jobs.enabled = False
 
+    def set_default_job_event_metric(self, metric: Counter):
+        self._raise_if_started()
+        config.jobs.job_event_metric = metric
+
     def set_default_job_time_metric(self, metric: Histogram):
         self._raise_if_started()
-        config.jobs.default_job_time_metric = metric
+        config.jobs.job_time_metric = metric
 
     # ======== Logging
     def logging_set_prefix(self, prefix: str):

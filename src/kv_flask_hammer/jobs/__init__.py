@@ -5,11 +5,12 @@ import logging
 
 from prometheus_client import Histogram
 
+from flask import Flask
 
 from kv_flask_hammer import config
 from kv_flask_hammer.logger import get_logger
 from kv_flask_hammer.utils.metrics import DefaultMetrics
-from kv_flask_hammer.utils.scheduler import scheduler
+from kv_flask_hammer.utils.scheduler import Scheduler
 from kv_flask_hammer.utils.scheduler import filter_apscheduler_logs
 
 
@@ -18,6 +19,7 @@ MINUTE_S = 60
 
 
 def add_job(
+    scheduler: Scheduler,
     job_func: t.Callable,
     job_id: str,
     interval_seconds: int,
@@ -45,12 +47,20 @@ def add_job(
     )
 
 
-def init(flask_app):
+scheduler: Scheduler
+
+
+def init(flask_app: Flask, init_scheduler: Scheduler):
     filter_apscheduler_logs(LOG)
 
     # Jobs must be added before starting the scheduler?
-    scheduler.start(flask_app=flask_app)
+    init_scheduler.start(flask_app=flask_app)
+    global scheduler
+    scheduler = init_scheduler
 
 
-def stop():
-    scheduler.stop()
+def stop(scheduler: Scheduler):
+    if scheduler:
+        scheduler.stop()
+    raise ValueError("stop() called without valid 'scheduler' obj.")
+

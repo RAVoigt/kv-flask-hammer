@@ -12,6 +12,7 @@ from kv_flask_hammer import config
 from kv_flask_hammer import jobs
 from kv_flask_hammer.config_interface import FlaskHammer_Interface_Config
 from kv_flask_hammer.exceptions import AlreadyStartedError
+from kv_flask_hammer.exceptions import FlaskHammerError
 from kv_flask_hammer.exceptions import ImmutableConfigError
 from kv_flask_hammer.gunicorn_app import FlaskHammerGunicornApp
 from kv_flask_hammer.gunicorn_app import gunicorn_funcs
@@ -27,6 +28,7 @@ class FlaskHammer(metaclass=SingletonMeta):
     _flask_app: Flask
     _config: FlaskHammer_Interface_Config
     _started: bool = False
+    _scheduler: Scheduler
     version: str | None = None
 
     def __init__(self, flask_app: Flask | None = None, version: str | None = None) -> None:
@@ -49,7 +51,9 @@ class FlaskHammer(metaclass=SingletonMeta):
         """
         APScheduler instance can be retrieved from 'ap_scheduler' attr of the object returned by this property
         """
-        return jobs.scheduler
+        if not config.jobs.enabled:
+            raise FlaskHammerError("Jobs are not enabled on this instance.")
+        return self._scheduler
 
     @property
     def started(self) -> bool:
@@ -101,7 +105,11 @@ class FlaskHammer(metaclass=SingletonMeta):
 
         # ======== Periodic Jobs
         if config.jobs.enabled:
-            jobs.init(flask_app)
+            self._scheduler = Scheduler(
+                job_event_metric=config.jobs.job_event_metric,
+                job_time_metric=config.jobs.job_time_metric,
+            )
+            jobs.init(flask_app, self._scheduler)
 
         # ======== Finish up
         self._started = True
@@ -129,6 +137,7 @@ class FlaskHammer(metaclass=SingletonMeta):
         if self._started:
             raise AlreadyStartedError("Cannot add jobs after FlaskHammer has started")
         jobs.add_job(
+            self.job_scheduler,
             job_func,
             job_id,
             interval_seconds,

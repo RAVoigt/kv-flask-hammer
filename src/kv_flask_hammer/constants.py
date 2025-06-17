@@ -16,3 +16,6 @@ default_traces_service_name = "Flask-Hammer"
 default_meta_view_prefix = "meta"
 
 default_do_metrics_for_exceptions = True
+
+default_job_event_metric = None
+default_job_time_metric = None
