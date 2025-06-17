@@ -75,12 +75,14 @@ class DefaultMetrics(metaclass=SingletonMeta):
     _HTTP_RESPONSE_COUNT_metrics: dict[str, Counter]
     _SCHEDULER_JOB_EVENT_metrics: dict[str, Counter]
     _SERVER_REQUEST_SECONDS_metrics: dict[str, Histogram]
+    _UNCAUGHT_EXCEPTIONS_metrics: dict[str, Counter]
 
     def __init__(self) -> None:
         self._APP_INFO_metrics = dict()
         self._HTTP_RESPONSE_COUNT_metrics = dict()
         self._SCHEDULER_JOB_EVENT_metrics = dict()
         self._SERVER_REQUEST_SECONDS_metrics = dict()
+        self._UNCAUGHT_EXCEPTIONS_metrics = dict()
 
     def get_APP_INFO(
         self,
@@ -199,3 +201,32 @@ class DefaultMetrics(metaclass=SingletonMeta):
         full_name_override: str | None = None,
     ) -> Histogram:
         return cls().get_SERVER_REQUEST_SECONDS(name_prefix=name_prefix, description=description, labelnames=labelnames, full_name_override=full_name_override)
+
+    def get_UNCAUGHT_EXCEPTIONS(
+        self,
+        name_prefix: str | None = None,
+        description: str = "Total unhandled exceptions in Flask",
+        labelnames: list[str] | None = None,
+        full_name_override: str | None = None,
+    ):
+        if full_name_override:
+            metric_name = full_name_override
+        else:
+            metric_name = add_prefix("unhandled_exceptions_total", name_prefix)
+        if not labelnames:
+            labelnames = ["exc_cls_name"]
+        metric: Counter | None = self._UNCAUGHT_EXCEPTIONS_metrics.get(metric_name, None)
+        if not metric:
+            metric = Counter(metric_name, description, labelnames=labelnames)
+            self._UNCAUGHT_EXCEPTIONS_metrics[metric_name] = metric
+        return metric
+
+    @classmethod
+    def UNCAUGHT_EXCEPTIONS(
+        cls,
+        name_prefix: str | None = None,
+        description: str = "Time taken for server to handle request",
+        labelnames: list[str] | None = None,
+        full_name_override: str | None = None,
+    ) -> Counter:
+        return cls().get_UNCAUGHT_EXCEPTIONS(name_prefix=name_prefix, description=description, labelnames=labelnames, full_name_override=full_name_override)

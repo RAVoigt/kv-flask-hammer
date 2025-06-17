@@ -138,6 +138,10 @@ class FlaskHammer_Interface_Config(metaclass=SingletonMeta):
         self._raise_if_started()
         config.middleware.server_request_metric = metric
 
+    def middleware_disable_exception_metrics(self):
+        self._raise_if_started()
+        config.middleware.do_metrics_for_exceptions = False
+
     # ======== Metrics
     def metrics_enable(self):
         self._raise_if_started()

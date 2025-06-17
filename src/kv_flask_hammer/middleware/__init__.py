@@ -9,7 +9,13 @@ from kvcommon.urls import urlparse_ignore_scheme
 
 from kv_flask_hammer import config
 from kv_flask_hammer.constants import default_meta_view_prefix
+from kv_flask_hammer.logger import get_logger
 from kv_flask_hammer.utils.context import set_flask_context_local
+from kv_flask_hammer.utils.metrics import DefaultMetrics
+from kv_flask_hammer.utils.metrics import inc
+
+
+LOG = get_logger("middleware")
 
 
 def is_meta_url(url: str, prefix: str | None = "meta") -> bool:
@@ -69,3 +75,12 @@ class FlaskHammerMiddleware(BaseHTTPMiddleware):
     def dispatch(self, request, call_next):
         self._pre_dispatch(request=request)
         return self._dispatch(request=request, call_next=call_next)
+
+    def error_handler(self, error: Exception):
+        if config.middleware.do_metrics_for_exceptions:
+            try:
+                exc_cls_name = error.__class__.__name__
+                inc(DefaultMetrics.UNCAUGHT_EXCEPTIONS(), labels=dict(exc_cls_name=exc_cls_name))
+            except Exception as ex:
+                LOG.error("Error while trying to emit metrics for uncaught exceptions: '%s", ex)
+        raise error

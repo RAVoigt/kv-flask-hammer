@@ -14,3 +14,5 @@ default_metrics_port = 9090
 default_traces_service_name = "Flask-Hammer"
 
 default_meta_view_prefix = "meta"
+
+default_do_metrics_for_exceptions = True
