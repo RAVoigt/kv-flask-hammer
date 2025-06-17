@@ -15,6 +15,7 @@ from prometheus_client import Counter
 from prometheus_client import Histogram
 
 from kv_flask_hammer.utils import metrics
+
 from kvcommon.logger import get_logger
 
 
@@ -34,6 +35,7 @@ class SchedulerEventTracker(object):
     """
     Emits metrics for job events
     """
+
     job_event_metric: Counter
 
     def __init__(self, job_event_metric: Counter) -> None:
@@ -46,17 +48,25 @@ class SchedulerEventTracker(object):
                 event_str = "Unknown"
                 if event.exception or event.code == EVENT_JOB_ERROR:
                     event_str = "Error"
+                    exc_cls_name = ""
+                    if event.exception:
+                        exc_cls_name = event.exception.__class__.__name__
+                    metrics.inc(
+                        metrics.DefaultMetrics().UNHANDLED_EXCEPTIONS(),
+                        labels=dict(exc_cls_name=exc_cls_name, source=metrics.UnhandledExceptionSources.JOB),
+                    )
                 else:
                     if event.code == EVENT_JOB_EXECUTED:
                         event_str = "Executed"
                     elif event.code == EVENT_JOB_MISSED:
                         event_str = "Missed"
 
-                LOG.debug(f"Scheduler Event Listener: {event}: Job <'{event.job_id}'>")
+                # LOG.debug(f"Scheduler Event Listener: {event}: Job <'{event.job_id}'>")
                 metrics.inc(self.job_event_metric.labels(job_id=event.job_id, event=event_str.lower()))
 
             else:
                 LOG.warning(f"Scheduler Event Listener: Unexpected event type: '{type(event).__name__}'")
+
         return event_listener
 
 
@@ -64,11 +74,17 @@ class Scheduler:
     """
     Wraps APScheduler with some convenience functions and adds logging and metrics
     """
+
     ap_scheduler: APScheduler
     event_tracker: SchedulerEventTracker | None
     job_time_metric: Histogram | None
 
-    def __init__(self, job_time_metric: Histogram | None = None, job_event_metric: Counter | None = None, api_enabled: bool = False) -> None:
+    def __init__(
+        self,
+        job_time_metric: Histogram | None = None,
+        job_event_metric: Counter | None = None,
+        api_enabled: bool = False,
+    ) -> None:
         scheduler = APScheduler()
         scheduler.api_enabled = api_enabled
         self.ap_scheduler = scheduler
@@ -90,7 +106,7 @@ class Scheduler:
         run_immediately_via_thread: bool = False,
         verbose_logging: bool = False,
         *job_args,
-        **job_kwargs
+        **job_kwargs,
     ):
         LOG.debug("Scheduler: Adding job with ID: '%s', Interval: %s (s)", job_id, interval_seconds)
 
@@ -111,7 +127,7 @@ class Scheduler:
                 job_func(*job_args, **job_kwargs)
 
         if run_immediately_via_thread:
-            thread = threading.Thread(target = job)
+            thread = threading.Thread(target=job)
             thread.start()
 
     def start(self, flask_app):
