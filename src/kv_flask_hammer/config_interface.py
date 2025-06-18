@@ -1,6 +1,7 @@
 import typing as t
 
 from flask_http_middleware import BaseHTTPMiddleware
+from prometheus_client import Counter
 from prometheus_client import Histogram
 
 from kvcommon.singleton import SingletonMeta
@@ -76,17 +77,29 @@ class FlaskHammer_Interface_Config(metaclass=SingletonMeta):
         config.app.gunicorn_accesslog_format = log_format
 
     # ======== Jobs
-    def jobs_enable(self):
+    def jobs_enable(
+            self,
+            default_job_event_metric: Counter | None = None,
+            default_job_time_metric: Histogram | None = None
+        ):
         self._raise_if_started()
         config.jobs.enabled = True
+        if default_job_event_metric is not None:
+            self.jobs_set_default_job_event_metric(default_job_event_metric)
+        if default_job_time_metric is not None:
+            self.jobs_set_default_job_time_metric(default_job_time_metric)
 
     def jobs_disable(self):
         self._raise_if_started()
         config.jobs.enabled = False
 
-    def set_default_job_time_metric(self, metric: Histogram):
+    def jobs_set_default_job_event_metric(self, metric: Counter):
         self._raise_if_started()
-        config.jobs.default_job_time_metric = metric
+        config.jobs.job_event_metric = metric
+
+    def jobs_set_default_job_time_metric(self, metric: Histogram):
+        self._raise_if_started()
+        config.jobs.job_time_metric = metric
 
     # ======== Logging
     def logging_set_prefix(self, prefix: str):

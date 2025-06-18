@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "kv-flask-hammer"
-version = "0.2.5a0"
+version = "0.2.5"
 description = "Flask-Hammer - For when every problem looks like a nail."
 authors = ["Rob Voigt <code@ravoigt.com>"]
 readme = "README.md"

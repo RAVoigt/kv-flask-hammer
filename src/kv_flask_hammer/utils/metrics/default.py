@@ -24,16 +24,20 @@ class DefaultMetrics(MetricRegistry, metaclass=SingletonMeta):
 
     def APP_INFO(
         self,
+        description: str = "App Info.",
+        labelnames: list[str] | None = None,
         name_prefix: str | None = None,
         full_name_override: str | None = None,
     ) -> Gauge:
+        if labelnames is None:
+            labelnames = ["version", "workers"]
         return t.cast(
             Gauge,
             self.get_or_create(
                 metric_class=Gauge,
                 name="app_info",
-                description="App Info.",
-                labelnames=["version", "workers"],
+                description=description,
+                labelnames=labelnames,
                 name_prefix=name_prefix,
                 full_name_override=full_name_override,
                 multiprocess_mode="mostrecent",
@@ -42,16 +46,20 @@ class DefaultMetrics(MetricRegistry, metaclass=SingletonMeta):
 
     def HTTP_RESPONSE_COUNT(
         self,
+        description: str = "Count of HTTP responses by status code.",
+        labelnames: list[str] | None = None,
         name_prefix: str | None = None,
         full_name_override: str | None = None,
     ) -> Counter:
+        if labelnames is None:
+            labelnames = ["code", "path"]
         return t.cast(
             Counter,
             self.get_or_create(
                 metric_class=Counter,
                 name="http_response_total",
-                description="Count of HTTP responses by status code.",
-                labelnames=["code", "path"],
+                description=description,
+                labelnames=labelnames,
                 name_prefix=name_prefix,
                 full_name_override=full_name_override,
             ),
@@ -59,16 +67,20 @@ class DefaultMetrics(MetricRegistry, metaclass=SingletonMeta):
 
     def JOB_SECONDS(
         self,
+        description: str = "Time taken for a job to complete.",
+        labelnames: list[str] | None = None,
         name_prefix: str | None = None,
         full_name_override: str | None = None,
     ) -> Histogram:
+        if labelnames is None:
+            labelnames = ["job_id"]
         return t.cast(
             Histogram,
             self.get_or_create(
                 metric_class=Histogram,
                 name="job_seconds",
-                description="Time taken for a job to complete.",
-                labelnames=["job_id"],
+                description=description,
+                labelnames=labelnames,
                 name_prefix=name_prefix,
                 full_name_override=full_name_override,
             ),
@@ -76,16 +88,20 @@ class DefaultMetrics(MetricRegistry, metaclass=SingletonMeta):
 
     def SCHEDULER_JOB_EVENT(
         self,
+        description: str = "Count of scheduled job events by job id and event key.",
+        labelnames: list[str] | None = None,
         name_prefix: str | None = None,
         full_name_override: str | None = None,
     ) -> Counter:
+        if labelnames is None:
+            labelnames = ["job_id", "event"]
         return t.cast(
             Counter,
             self.get_or_create(
                 metric_class=Counter,
                 name="scheduler_job_event_total",
-                description="Count of scheduled job events by job id and event key.",
-                labelnames=["job_id", "event"],
+                description=description,
+                labelnames=labelnames,
                 name_prefix=name_prefix,
                 full_name_override=full_name_override,
             ),
@@ -93,16 +109,20 @@ class DefaultMetrics(MetricRegistry, metaclass=SingletonMeta):
 
     def SERVER_REQUEST_SECONDS(
         self,
+        description: str = "Time taken for server to handle request.",
+        labelnames: list[str] | None = None,
         name_prefix: str | None = None,
         full_name_override: str | None = None,
     ) -> Histogram:
+        if labelnames is None:
+            labelnames = ["path"]
         return t.cast(
             Histogram,
             self.get_or_create(
                 metric_class=Histogram,
                 name="server_request_seconds",
-                description="Time taken for server to handle request.",
-                labelnames=["path"],
+                description=description,
+                labelnames=labelnames,
                 name_prefix=name_prefix,
                 full_name_override=full_name_override,
             ),
@@ -110,16 +130,20 @@ class DefaultMetrics(MetricRegistry, metaclass=SingletonMeta):
 
     def UNHANDLED_EXCEPTIONS(
         self,
+        description: str = "Count of unhandled exceptions.",
+        labelnames: list[str] | None = None,
         name_prefix: str | None = None,
         full_name_override: str | None = None,
     ) -> Counter:
+        if labelnames is None:
+            labelnames = ["exc_cls_name", "source"]
         return t.cast(
             Counter,
             self.get_or_create(
                 metric_class=Counter,
                 name="unhandled_exceptions_total",
-                description="Count of unhandled exceptions.",
-                labelnames=["exc_cls_name", "source"],
+                description=description,
+                labelnames=labelnames,
                 name_prefix=name_prefix,
                 full_name_override=full_name_override,
             ),
