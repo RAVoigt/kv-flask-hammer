@@ -32,6 +32,7 @@ def filter_apscheduler_logs(logger: logging.Logger = LOG):
     logger.addFilter(SuppressThreadPoolExecutorLogging())
 
 
+# TODO: Support setting labels for job_event_metric
 class SchedulerEventTracker(object):
     """
     Emits metrics for job events
