@@ -46,7 +46,7 @@ opentelemetry-instrumentation-flask = "*" # TODO
 opentelemetry-instrumentation-logging = "*" # TODO
 
 # ==== etc
-kvcommon = {extras = ["flask", "metrics", "traces"], version = "^0.4.4"}
+kvcommon = {extras = ["flask", "metrics", "traces"], version = "^0.4.5"}
 protobuf = ">=5.29.5" # Pinned
 
 [tool.poetry.group.dev]
