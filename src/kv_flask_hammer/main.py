@@ -88,7 +88,7 @@ class FlaskHammer(metaclass=SingletonMeta):
             )
             self._flask_app.register_blueprint(bp_healthz)
 
-        if config.views.default_healthz_enabled:
+        if config.views.default_meta_enabled:
             bp_meta = setup_default_meta(
                 prefix=config.views.meta_route_prefix,
                 debug_info_callback=config.views.meta_debug_info_callback,
